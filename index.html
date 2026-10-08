@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Color Diff</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1>Color Diff</h1>
+    <div class="actions">
+      <label class="btn primary">
+        Open image
+        <input id="fileInput" type="file" accept="image/*" hidden>
+      </label>
+      <button id="cameraBtn" class="btn" type="button">Take photo</button>
+      <!-- Fallback when getUserMedia is unavailable: native camera picker on mobile -->
+      <input id="captureInput" type="file" accept="image/*" capture="environment" hidden>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="stage-col">
+      <div class="toolbar">
+        <div class="seg" role="group" aria-label="Selected point">
+          <button type="button" class="seg-btn a active" data-target="A">Point A</button>
+          <button type="button" class="seg-btn b" data-target="B">Point B</button>
+        </div>
+        <label class="field">
+          Sample
+          <select id="radius">
+            <option value="0">1 px</option>
+            <option value="1">3×3</option>
+            <option value="2" selected>5×5</option>
+            <option value="4">9×9</option>
+            <option value="7">15×15</option>
+            <option value="12">25×25</option>
+          </select>
+        </label>
+        <button id="swapBtn" class="btn small" type="button">Swap</button>
+        <button id="clearBtn" class="btn small" type="button">Clear</button>
+      </div>
+
+      <div id="stage" class="stage">
+        <canvas id="view"></canvas>
+        <canvas id="loupe" class="loupe" hidden></canvas>
+        <div id="empty" class="empty">
+          <p><strong>Open or take a photo</strong></p>
+          <p>You can also drop an image here or paste one with Ctrl/⌘+V.</p>
+        </div>
+      </div>
+      <p class="hint">
+        Click to move the selected point there. Drag a marker to adjust it.
+        Arrow keys nudge the selected point (Shift moves 10 px).
+        Sampling averages the pixel area in linear light, which reduces sensor noise.
+      </p>
+    </section>
+
+    <aside id="results" class="results"></aside>
+  </main>
+
+  <dialog id="camDialog" class="cam">
+    <video id="video" playsinline autoplay muted></video>
+    <div class="cam-actions">
+      <button id="camCancel" class="btn" type="button">Cancel</button>
+      <button id="camFlip" class="btn" type="button">Switch camera</button>
+      <button id="camShoot" class="btn primary" type="button">Capture</button>
+    </div>
+  </dialog>
+
+  <script src="color.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

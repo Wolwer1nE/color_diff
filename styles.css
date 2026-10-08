@@ -1,0 +1,227 @@
+:root {
+  --bg: #f6f7f9;
+  --panel: #ffffff;
+  --text: #1b1e23;
+  --muted: #646b76;
+  --border: #dde1e6;
+  --accent: #2f6fde;
+  --accent-text: #ffffff;
+  --stage: #e9ecf0;
+  --a: #ff4d6d;
+  --b: #2fa8ff;
+  --radius: 10px;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111317;
+    --panel: #1a1d22;
+    --text: #e8eaed;
+    --muted: #99a0aa;
+    --border: #2c3138;
+    --accent: #5b8ff0;
+    --stage: #0b0c0f;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+}
+.topbar h1 { margin: 0; font-size: 18px; }
+.actions { display: flex; gap: 8px; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+  user-select: none;
+}
+.btn:hover { border-color: var(--muted); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-text); }
+.btn.small { padding: 5px 10px; }
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 440px;
+  gap: 16px;
+  padding: 16px;
+  align-items: start;
+}
+@media (max-width: 960px) {
+  .layout { grid-template-columns: minmax(0, 1fr); }
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.seg-btn {
+  padding: 6px 12px;
+  border: 0;
+  background: var(--panel);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+.seg-btn::before {
+  content: "";
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-right: 6px;
+  border-radius: 50%;
+  vertical-align: 0;
+}
+.seg-btn.a::before { background: var(--a); }
+.seg-btn.b::before { background: var(--b); }
+.seg-btn.active { background: var(--accent); color: var(--accent-text); }
+.field { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); }
+.field select {
+  padding: 5px 6px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--panel);
+  color: var(--text);
+  font: inherit;
+}
+
+.stage {
+  position: relative;
+  height: 55vh;
+  min-height: 240px;
+  border-radius: var(--radius);
+  background: var(--stage);
+  overflow: hidden;
+  touch-action: none;
+}
+.stage.dragover { outline: 3px dashed var(--accent); outline-offset: -6px; }
+.stage.has-image canvas#view { cursor: crosshair; }
+#view { display: block; }
+
+.empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  color: var(--muted);
+  padding: 16px;
+  pointer-events: none;
+}
+.empty[hidden], .loupe[hidden] { display: none; }
+.empty p { margin: 4px 0; }
+
+.loupe {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 150px;
+  height: 172px;
+  border-radius: 8px;
+  outline: 2px solid rgba(255, 255, 255, .9);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, .45);
+  pointer-events: none;
+}
+.loupe.right { left: auto; right: 10px; }
+
+.hint { color: var(--muted); font-size: 12.5px; margin: 8px 2px 0; }
+
+/* ---------- Results ---------- */
+.results {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  min-width: 0;
+}
+.results .placeholder { color: var(--muted); margin: 0; }
+
+.swatches { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.sw .chip {
+  position: relative;
+  height: 64px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+.sw .chip.empty-chip {
+  background: repeating-linear-gradient(45deg, transparent 0 6px, var(--border) 6px 7px);
+}
+.tag {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  min-width: 22px;
+  padding: 1px 6px;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 12px;
+  text-align: center;
+}
+.tag.A { background: var(--a); }
+.tag.B { background: var(--b); }
+.sw dl { margin: 8px 0 0; display: grid; grid-template-columns: auto 1fr; gap: 1px 8px; font-size: 12px; }
+.sw dt { color: var(--muted); }
+.sw dd { margin: 0; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; overflow-wrap: anywhere; }
+
+.strip { display: flex; height: 44px; margin-top: 14px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+.strip div { flex: 1; }
+
+.headline { margin: 16px 0 4px; }
+.headline .big { font-size: 30px; font-weight: 700; letter-spacing: -.01em; }
+.headline .big small { font-size: 15px; font-weight: 500; color: var(--muted); margin-right: 6px; }
+.headline .verdict { color: var(--muted); }
+.scale { position: relative; height: 8px; margin: 10px 0 2px; border-radius: 4px;
+  background: linear-gradient(90deg, #2ecc71 0%, #a3d977 10%, #f5c542 35%, #f08a3c 65%, #e0474c 100%); }
+.scale .pin { position: absolute; top: -4px; width: 4px; height: 16px; margin-left: -2px; border-radius: 2px; background: var(--text); }
+.scale-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); }
+
+.group { margin-top: 18px; }
+.group h3 { margin: 0 0 6px; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+.group table { width: 100%; border-collapse: collapse; }
+.group td { padding: 6px 0; border-top: 1px solid var(--border); vertical-align: top; }
+.group td.name { padding-right: 8px; }
+.group td.val { text-align: right; white-space: nowrap; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-weight: 600; }
+.group .note { display: block; color: var(--muted); font-size: 12px; }
+
+.row-actions { margin-top: 16px; display: flex; gap: 8px; }
+
+/* ---------- Camera dialog ---------- */
+.cam {
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  background: #000;
+  max-width: min(960px, 96vw);
+  width: 100%;
+}
+.cam::backdrop { background: rgba(0, 0, 0, .7); }
+.cam video { display: block; width: 100%; max-height: 75vh; background: #000; }
+.cam-actions { display: flex; justify-content: center; gap: 8px; padding: 12px; background: var(--panel); }
